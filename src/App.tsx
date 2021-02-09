@@ -10,10 +10,11 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import { useQuery } from 'urql';
+import { useQuery, useMutation } from 'urql';
 
 import './App.css';
-import { MAIN_QUERY, MainQuery, Item } from './api';
+import { MAIN_QUERY, MainQuery, Item, CREATE_ORDER_MUTATION, CreateOrderInputVariables, OrderStatus } from './api';
+import { Button } from '@material-ui/core';
 
 const useStyles = makeStyles({
   table: {
@@ -56,10 +57,10 @@ const OrderItems = () => {
 
 
 function App() {
-
   const [result] = useQuery<MainQuery>({
     query: MAIN_QUERY,
   });
+  const [createOrderResult, createOrder] = useMutation<any, CreateOrderInputVariables>(CREATE_ORDER_MUTATION);
   const { data, fetching, error } = result;
 
   if (fetching) return <p>Loading...</p>;
@@ -68,6 +69,19 @@ function App() {
   return (
     <Container component="main" maxWidth="md">
     <CssBaseline />
+      <Button 
+        type="submit"
+        variant="contained"
+        color="primary"
+        onClick={() => {
+          const baseItems = data.base_order.map(({ item_id, quantity }) => ({ item_id, quantity }));
+
+          createOrder({
+            order_date: "2021/12/09",
+            status: OrderStatus.Ongoing,
+            order_items: { data: baseItems }
+          }).then(result => console.log(result))
+      }}>Skapa beställning</Button>
       <AvailableItems items={data.items}/>
     </Container>
   );
