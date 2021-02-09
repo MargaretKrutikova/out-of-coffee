@@ -9,19 +9,20 @@ import Paper from '@material-ui/core/Paper';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import AddIcon from '@material-ui/icons/Add';
 
 import { useQuery, useMutation } from 'urql';
 
 import './App.css';
-import { createNextOrderFromBaseItems, MAIN_QUERY, MainQuery, Item, CREATE_ORDER_MUTATION, CreateOrderInputVariables, OrderStatus, Order } from './api';
-import { Button, Typography } from '@material-ui/core';
+import { createNextOrderFromBaseItems, UpdateOrderItemInputVariables, UPDATE_ORDER_ITEM_MUTATION, MAIN_QUERY, MainQuery, Item, CREATE_ORDER_MUTATION, CreateOrderInputVariables, OrderStatus, Order } from './api';
+import { Box, Button, IconButton, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles({
   table: {
   },
 });
 
-const AvailableItems = (props: { items: Item[] }) => {
+const AvailableItems = (props: { items: Item[], addItemToOrder: (itemId: number) => void }) => {
   const classes = useStyles();
 
   return (
@@ -39,7 +40,7 @@ const AvailableItems = (props: { items: Item[] }) => {
           {props.items.map((item) => (
             <TableRow key={item.name}>
               <TableCell component="th" scope="row">
-                {item.link ? <a href={item.link} target="_blank">{item.name}</a> : item.name}
+              <IconButton size="small" onClick={() => props.addItemToOrder(item.id)} color="primary"><AddIcon /></IconButton>{item.link ? <a href={item.link} target="_blank">{item.name}</a> : item.name}
               </TableCell>
               <TableCell align="center">{item.category}</TableCell>
             </TableRow>
@@ -81,6 +82,19 @@ const OngoingOrder = ({ order }: {order : Order}) => {
       </>)
 }
 
+const CurrentOrder = ({ order, allItems }: { order: Order, allItems: Item[]}) => {
+  const orderItemIds = order.order_items.map(item => item.item.id);
+  const availableItems = allItems.filter(item => !orderItemIds.includes(item.id));
+
+  const [_, updateOrderItem] = useMutation<any, UpdateOrderItemInputVariables>(UPDATE_ORDER_ITEM_MUTATION);
+  const defaultQuantity = "1 st"
+  const addItemToOrder = (itemId: number) => updateOrderItem({ item_id:itemId, order_id: order.id, quantity: defaultQuantity })
+  return (<> 
+      <Box marginBottom={4} marginTop={2}><OngoingOrder order={order}/></Box>
+      <AvailableItems items={availableItems} addItemToOrder={addItemToOrder}/>
+    </>)
+}
+
 function App() {
   const [result, refetchOrder] = useQuery<MainQuery>({
     query: MAIN_QUERY,
@@ -95,7 +109,7 @@ function App() {
     <Container component="main" maxWidth="sm">
     <CssBaseline />
       {data.orders.length > 0 ?
-        <OngoingOrder order={data.orders[0]}/> :
+        <CurrentOrder order={data.orders[0]} allItems={data.items} /> :
         <Button 
           type="submit"
           variant="contained"
@@ -103,7 +117,6 @@ function App() {
           onClick={() => createNextOrderFromBaseItems(data.base_order, createOrder).then(refetchOrder)}>
             Skapa beställning</Button>
       }
-      <AvailableItems items={data.items}/>
     </Container>
   );
 }
