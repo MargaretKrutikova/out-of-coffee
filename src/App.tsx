@@ -13,7 +13,7 @@ import Container from '@material-ui/core/Container';
 import { useQuery, useMutation } from 'urql';
 
 import './App.css';
-import { MAIN_QUERY, MainQuery, Item, CREATE_ORDER_MUTATION, CreateOrderInputVariables, OrderStatus, Order } from './api';
+import { createNextOrderFromBaseItems, MAIN_QUERY, MainQuery, Item, CREATE_ORDER_MUTATION, CreateOrderInputVariables, OrderStatus, Order } from './api';
 import { Button, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -25,6 +25,8 @@ const AvailableItems = (props: { items: Item[] }) => {
   const classes = useStyles();
 
   return (
+    <>
+      <Typography variant="h5">Finns att beställa</Typography>
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small">
         <TableHead>
@@ -45,14 +47,15 @@ const AvailableItems = (props: { items: Item[] }) => {
         </TableBody>
       </Table>
     </TableContainer>
+    </>
   );
 }
 
 const OngoingOrder = ({ order }: {order : Order}) => {
+  const deadline = new Date(order.order_date).toLocaleDateString();
   return (
     <>
-      <Typography variant="h5">Pågående beställning</Typography>
-
+      <Typography variant="h5">Pågående beställning, skickas: <b>{deadline}</b></Typography>
       <TableContainer component={Paper}>
         <Table size="small">
           <TableHead>
@@ -78,7 +81,6 @@ const OngoingOrder = ({ order }: {order : Order}) => {
       </>)
 }
 
-
 function App() {
   const [result, refetchOrder] = useQuery<MainQuery>({
     query: MAIN_QUERY,
@@ -98,17 +100,9 @@ function App() {
           type="submit"
           variant="contained"
           color="primary"
-          onClick={() => {
-            const baseItems = data.base_order.map(({ item_id, quantity }) => ({ item_id, quantity }));
-
-            createOrder({
-              order_date: "2021/12/09",
-              status: OrderStatus.Ongoing,
-              order_items: { data: baseItems }
-            }).then(() => refetchOrder())
-        }}>Skapa beställning</Button>
+          onClick={() => createNextOrderFromBaseItems(data.base_order, createOrder).then(refetchOrder)}>
+            Skapa beställning</Button>
       }
-      <Typography variant="h5">Lägg till mer:</Typography>
       <AvailableItems items={data.items}/>
     </Container>
   );

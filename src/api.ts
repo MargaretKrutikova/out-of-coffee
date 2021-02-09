@@ -58,6 +58,25 @@ export type CreateOrderInputVariables = {
   order_items: { data: BaseItem[] }
 }
 
+const getNextDayOfWeek = (date: Date, dayOfWeek: number) => {
+  const resultDate = new Date(date.getTime());
+  resultDate.setDate(date.getDate() + (7 + dayOfWeek - date.getDay()) % 7);
+  return resultDate;
+}
+
+export const createNextOrderFromBaseItems = (items: BaseItem[], createOrder: (input: CreateOrderInputVariables) => Promise<any>) => {
+  // I order every Thursday, okay?
+  const thursdayDay = 4;
+  const nextThursday = getNextDayOfWeek(new Date(), thursdayDay);
+  const baseItems = items.map(({ item_id, quantity }) => ({ item_id, quantity }));
+  
+  return createOrder({
+    order_date: nextThursday.toLocaleDateString(),
+    status: OrderStatus.Ongoing,
+    order_items: { data: baseItems }
+  });
+}
+
 export type Item = {
   id: number
   name: string
