@@ -72,7 +72,7 @@ export type OrderItem = {
 
 export type Order = {
   id: number
-  order_date: any
+  order_date: string
   order_items: OrderItem []
 }
 

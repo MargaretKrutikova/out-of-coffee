@@ -13,12 +13,11 @@ import Container from '@material-ui/core/Container';
 import { useQuery, useMutation } from 'urql';
 
 import './App.css';
-import { MAIN_QUERY, MainQuery, Item, CREATE_ORDER_MUTATION, CreateOrderInputVariables, OrderStatus } from './api';
-import { Button } from '@material-ui/core';
+import { MAIN_QUERY, MainQuery, Item, CREATE_ORDER_MUTATION, CreateOrderInputVariables, OrderStatus, Order } from './api';
+import { Button, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 650,
   },
 });
 
@@ -27,11 +26,11 @@ const AvailableItems = (props: { items: Item[] }) => {
 
   return (
     <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
+      <Table className={classes.table} size="small">
         <TableHead>
           <TableRow>
             <TableCell>Namn</TableCell>
-            <TableCell align="right">Kategori</TableCell>
+            <TableCell align="center">Kategori</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -40,7 +39,7 @@ const AvailableItems = (props: { items: Item[] }) => {
               <TableCell component="th" scope="row">
                 {item.link ? <a href={item.link} target="_blank">{item.name}</a> : item.name}
               </TableCell>
-              <TableCell>{item.category}</TableCell>
+              <TableCell align="center">{item.category}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -49,15 +48,39 @@ const AvailableItems = (props: { items: Item[] }) => {
   );
 }
 
+const OngoingOrder = ({ order }: {order : Order}) => {
+  return (
+    <>
+      <Typography variant="h5">Pågående beställning</Typography>
 
-
-const OrderItems = () => {
-
+      <TableContainer component={Paper}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Namn</TableCell>
+              <TableCell>Antal</TableCell>
+              <TableCell align="center">Kategori</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {order.order_items.map(({ item, quantity }) => (
+              <TableRow key={item.name}>
+                <TableCell component="th" scope="row">
+                  {item.link ? <a href={item.link} target="_blank">{item.name}</a> : item.name}
+                </TableCell>
+                <TableCell>{quantity}</TableCell>
+                <TableCell align="center">{item.category}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      </>)
 }
 
 
 function App() {
-  const [result] = useQuery<MainQuery>({
+  const [result, refetchOrder] = useQuery<MainQuery>({
     query: MAIN_QUERY,
   });
   const [createOrderResult, createOrder] = useMutation<any, CreateOrderInputVariables>(CREATE_ORDER_MUTATION);
@@ -67,21 +90,25 @@ function App() {
   if (!data || error) return <p>Oh no... {error?.message}</p>;
 
   return (
-    <Container component="main" maxWidth="md">
+    <Container component="main" maxWidth="sm">
     <CssBaseline />
-      <Button 
-        type="submit"
-        variant="contained"
-        color="primary"
-        onClick={() => {
-          const baseItems = data.base_order.map(({ item_id, quantity }) => ({ item_id, quantity }));
+      {data.orders.length > 0 ?
+        <OngoingOrder order={data.orders[0]}/> :
+        <Button 
+          type="submit"
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            const baseItems = data.base_order.map(({ item_id, quantity }) => ({ item_id, quantity }));
 
-          createOrder({
-            order_date: "2021/12/09",
-            status: OrderStatus.Ongoing,
-            order_items: { data: baseItems }
-          }).then(result => console.log(result))
-      }}>Skapa beställning</Button>
+            createOrder({
+              order_date: "2021/12/09",
+              status: OrderStatus.Ongoing,
+              order_items: { data: baseItems }
+            }).then(() => refetchOrder())
+        }}>Skapa beställning</Button>
+      }
+      <Typography variant="h5">Lägg till mer:</Typography>
       <AvailableItems items={data.items}/>
     </Container>
   );
