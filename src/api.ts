@@ -35,8 +35,7 @@ export const MAIN_QUERY = `
   ${ORDER_FRAGMENT}
 `
 
-export const CREATE_ORDER_MUTATION = 
- `
+export const CREATE_ORDER_MUTATION = `
  mutation CreateOrder($order_date: timestamp!, $status: String!, $order_items: order_items_arr_rel_insert_input!) {
   insert_orders(objects: {order_date: $order_date, status: $status, order_items: $order_items}) {
     returning {
@@ -47,12 +46,19 @@ export const CREATE_ORDER_MUTATION =
  ${ORDER_FRAGMENT}
 `;
 
-export const UPDATE_ORDER_ITEM_MUTATION = 
-`
-  mutation MyMutation($item_id: Int!, $order_id: Int!, $quantity: String!) {
+export const UPDATE_ORDER_ITEM_MUTATION = `
+  mutation UpdateOrderItem($item_id: Int!, $order_id: Int!, $quantity: String!) {
     insert_order_items_one(object: {item_id: $item_id, order_id: $order_id, quantity: $quantity}, 
       on_conflict: {constraint: order_items_pkey, update_columns: quantity}) {
         item_id
+    }
+  }
+`
+
+export const DELETE_ORDER_ITEM_MUTATION = `
+  mutation DeleteOrderItem($itemId: Int!, $orderId: Int!) {
+    delete_order_items(where: {item_id: {_eq: $itemId}, order_id: {_eq: $orderId}}) {
+      affected_rows
     }
   }
 `

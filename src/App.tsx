@@ -10,21 +10,27 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import { useQuery, useMutation } from 'urql';
 
 import './App.css';
-import { createNextOrderFromBaseItems, UpdateOrderItemInputVariables, UPDATE_ORDER_ITEM_MUTATION, MAIN_QUERY, MainQuery, Item, CREATE_ORDER_MUTATION, CreateOrderInputVariables, OrderStatus, Order } from './api';
+import { createNextOrderFromBaseItems, UpdateOrderItemInputVariables, DELETE_ORDER_ITEM_MUTATION, UPDATE_ORDER_ITEM_MUTATION, MAIN_QUERY, MainQuery, Item, CREATE_ORDER_MUTATION, CreateOrderInputVariables, OrderStatus, Order } from './api';
 import { Box, Button, IconButton, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles({
-  table: {
-  },
+  table: {}
 });
 
-const AvailableItems = (props: { items: Item[], addItemToOrder: (itemId: number) => void }) => {
+const AvailableItems = (props: { items: Item[], orderId: number }) => {
   const classes = useStyles();
 
+  const [_, updateOrderItem] = useMutation<any, UpdateOrderItemInputVariables>(UPDATE_ORDER_ITEM_MUTATION);
+  const defaultQuantity = "1 st"
+
+  const addItemToOrder = (itemId: number) => 
+    updateOrderItem({ item_id:itemId, order_id: props.orderId, quantity: defaultQuantity })
+  
   return (
     <>
       <Typography variant="h5">Finns att beställa</Typography>
@@ -40,7 +46,7 @@ const AvailableItems = (props: { items: Item[], addItemToOrder: (itemId: number)
           {props.items.map((item) => (
             <TableRow key={item.name}>
               <TableCell component="th" scope="row">
-              <IconButton size="small" onClick={() => props.addItemToOrder(item.id)} color="primary"><AddIcon /></IconButton>{item.link ? <a href={item.link} target="_blank">{item.name}</a> : item.name}
+              <IconButton size="small" onClick={() => addItemToOrder(item.id)} color="primary"><AddIcon /></IconButton>{item.link ? <a href={item.link} target="_blank">{item.name}</a> : item.name}
               </TableCell>
               <TableCell align="center">{item.category}</TableCell>
             </TableRow>
@@ -53,6 +59,9 @@ const AvailableItems = (props: { items: Item[], addItemToOrder: (itemId: number)
 }
 
 const OngoingOrder = ({ order }: {order : Order}) => {
+  const [_, deleteOrderItem] = useMutation(DELETE_ORDER_ITEM_MUTATION);
+  const deleteItem = (itemId: number) => deleteOrderItem({ itemId, orderId: order.id })
+
   const deadline = new Date(order.order_date).toLocaleDateString();
   return (
     <>
@@ -64,6 +73,7 @@ const OngoingOrder = ({ order }: {order : Order}) => {
               <TableCell>Namn</TableCell>
               <TableCell>Antal</TableCell>
               <TableCell align="center">Kategori</TableCell>
+              <TableCell align="center"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -74,6 +84,11 @@ const OngoingOrder = ({ order }: {order : Order}) => {
                 </TableCell>
                 <TableCell>{quantity}</TableCell>
                 <TableCell align="center">{item.category}</TableCell>
+                <TableCell component="th" scope="row">
+                  <IconButton size="small" onClick={() => deleteItem(item.id)} color="primary">
+                    <DeleteIcon />
+                </IconButton>
+              </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -86,12 +101,9 @@ const CurrentOrder = ({ order, allItems }: { order: Order, allItems: Item[]}) =>
   const orderItemIds = order.order_items.map(item => item.item.id);
   const availableItems = allItems.filter(item => !orderItemIds.includes(item.id));
 
-  const [_, updateOrderItem] = useMutation<any, UpdateOrderItemInputVariables>(UPDATE_ORDER_ITEM_MUTATION);
-  const defaultQuantity = "1 st"
-  const addItemToOrder = (itemId: number) => updateOrderItem({ item_id:itemId, order_id: order.id, quantity: defaultQuantity })
-  return (<> 
+return (<> 
       <Box marginBottom={4} marginTop={2}><OngoingOrder order={order}/></Box>
-      <AvailableItems items={availableItems} addItemToOrder={addItemToOrder}/>
+      <AvailableItems items={availableItems} orderId={order.id}/>
     </>)
 }
 
