@@ -45,7 +45,7 @@ export const OrderItemRow = ({
     <TableRow key={item.name}>
       <TableCell component="th" scope="row">
         {item.link ? (
-          <a href={item.link} target="_blank">
+          <a href={item.link} target="_blank" rel="noreferrer">
             {item.name}
           </a>
         ) : (

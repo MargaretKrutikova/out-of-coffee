@@ -73,7 +73,7 @@ const AvailableItems = (props: { items: Item[]; orderId: number }) => {
                     <AddIcon />
                   </IconButton>
                   {item.link ? (
-                    <a href={item.link} target="_blank">
+                    <a href={item.link} target="_blank" rel="noreferrer">
                       {item.name}
                     </a>
                   ) : (
