@@ -35,6 +35,12 @@ export const MAIN_QUERY = `
   ${ORDER_FRAGMENT}
 `
 
+export const FETCH_CURRENT_ORDER_MUTATION = `
+  orders(limit: 1, where: {status: {_eq: "ongoing"}}) {
+    ...OrderFragment
+  }
+`
+
 export const CREATE_ORDER_MUTATION = `
  mutation CreateOrder($order_date: timestamp!, $status: String!, $order_items: order_items_arr_rel_insert_input!) {
   insert_orders(objects: {order_date: $order_date, status: $status, order_items: $order_items}) {
@@ -44,13 +50,21 @@ export const CREATE_ORDER_MUTATION = `
   }
  }
  ${ORDER_FRAGMENT}
-`;
+`
 
 export const UPDATE_ORDER_ITEM_MUTATION = `
   mutation UpdateOrderItem($item_id: Int!, $order_id: Int!, $quantity: String!) {
     insert_order_items_one(object: {item_id: $item_id, order_id: $order_id, quantity: $quantity}, 
       on_conflict: {constraint: order_items_pkey, update_columns: quantity}) {
         item_id
+    }
+  }
+`
+
+export const ADD_ORDER_ITEM_MUTATION = `
+  mutation AddOrderItem($category: String!, $link: String!, $name: String!, $quantity: String!, $order_id: Int!) {
+    insert_order_items_one(object: {item: {data: {link: $link, name: $name, category: $category}}, quantity: $quantity, order_id: $order_id}) {
+      order_id
     }
   }
 `
@@ -65,13 +79,21 @@ export const DELETE_ORDER_ITEM_MUTATION = `
 
 export enum OrderStatus {
   Ongoing = "ongoing",
-  Delivered = "delivered"
+  Delivered = "delivered",
 }
 
 export type CreateOrderInputVariables = {
   order_date: string
   status: OrderStatus
   order_items: { data: BaseItem[] }
+}
+
+export type AddOrderItemInputVariables = {
+  name: string
+  link: string
+  category: string
+  quantity: string
+  order_id: number
 }
 
 export type UpdateOrderItemInputVariables = {
@@ -81,22 +103,28 @@ export type UpdateOrderItemInputVariables = {
 }
 
 const getNextDayOfWeek = (date: Date, dayOfWeek: number) => {
-  const resultDate = new Date(date.getTime());
-  resultDate.setDate(date.getDate() + (7 + dayOfWeek - date.getDay()) % 7);
-  return resultDate;
+  const resultDate = new Date(date.getTime())
+  resultDate.setDate(date.getDate() + ((7 + dayOfWeek - date.getDay()) % 7))
+  return resultDate
 }
 
-export const createNextOrderFromBaseItems = (items: BaseItem[], createOrder: (input: CreateOrderInputVariables) => Promise<any>) => {
+export const createNextOrderFromBaseItems = (
+  items: BaseItem[],
+  createOrder: (input: CreateOrderInputVariables) => Promise<any>
+) => {
   // I order every Thursday, okay?
-  const thursdayDay = 4;
-  const nextThursday = getNextDayOfWeek(new Date(), thursdayDay);
-  const baseItems = items.map(({ item_id, quantity }) => ({ item_id, quantity }));
-  
+  const thursdayDay = 4
+  const nextThursday = getNextDayOfWeek(new Date(), thursdayDay)
+  const baseItems = items.map(({ item_id, quantity }) => ({
+    item_id,
+    quantity,
+  }))
+
   return createOrder({
     order_date: nextThursday.toLocaleDateString(),
     status: OrderStatus.Ongoing,
-    order_items: { data: baseItems }
-  });
+    order_items: { data: baseItems },
+  })
 }
 
 export type Item = {
@@ -114,7 +142,7 @@ export type OrderItem = {
 export type Order = {
   id: number
   order_date: string
-  order_items: OrderItem []
+  order_items: OrderItem[]
 }
 
 export type BaseItem = {
