@@ -1,3 +1,4 @@
+import { client } from "./graphqlClient"
 import { getNextDayOfWeek } from "./utils"
 
 const ORDER_FRAGMENT = `
@@ -37,10 +38,13 @@ export const MAIN_QUERY = `
   ${ORDER_FRAGMENT}
 `
 
-export const FETCH_CURRENT_ORDER_MUTATION = `
-  orders(limit: 1, where: {status: {_eq: "ongoing"}}) {
+export const FETCH_CURRENT_ORDER = `
+  query CurrentOrder {
+    orders(limit: 1, where: {status: {_eq: "ongoing"}}) {
     ...OrderFragment
+    }
   }
+  ${ORDER_FRAGMENT}
 `
 
 export const CREATE_ORDER_MUTATION = `
@@ -150,4 +154,26 @@ export type MainQuery = {
   base_order: BaseItem[]
   items: Item[]
   orders: Order[]
+}
+
+const formatItem = ({ item, quantity }: OrderItem) => {
+  const name =
+    !!item.link && item.link.indexOf("mat.se") > 0 ? item.link : item.name
+  return `- ${name}, ${quantity}\n`
+}
+
+export const generateOrderMessage = () => {
+  client
+    .query(FETCH_CURRENT_ORDER)
+    .toPromise()
+    .then((result) => {
+      if (!result.data || result.data.orders.length === 0) {
+        console.error("Error")
+      } else {
+        const order = result.data.orders[0] as Order
+
+        const message = order.order_items.map(formatItem).join("")
+        console.log(message)
+      }
+    })
 }

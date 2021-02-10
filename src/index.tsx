@@ -1,18 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import { createClient, Provider } from 'urql';
-
-const client = createClient({
-  url: '',
-});
+import React from "react"
+import ReactDOM from "react-dom"
+import "./index.css"
+import App from "./App"
+import { Provider } from "urql"
+import { client } from "./graphqlClient"
 
 ReactDOM.render(
   <React.StrictMode>
-     <Provider value={client}>
+    <Provider value={client}>
       <App />
     </Provider>
   </React.StrictMode>,
-  document.getElementById('root')
-);
+  document.getElementById("root")
+)

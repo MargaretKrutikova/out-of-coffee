@@ -25,6 +25,7 @@ import {
   CREATE_ORDER_MUTATION,
   CreateOrderInputVariables,
   Order,
+  generateOrderMessage,
 } from "./api"
 import { OngoingOrder } from "./CurrentOrder"
 
@@ -142,6 +143,15 @@ function App() {
           Skapa beställning
         </Button>
       )}
+      <Box margin={4}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={generateOrderMessage}
+        >
+          Generera meddelande
+        </Button>
+      </Box>
     </Container>
   )
 }
