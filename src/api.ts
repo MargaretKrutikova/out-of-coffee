@@ -1,3 +1,5 @@
+import { getNextDayOfWeek } from "./utils"
+
 const ORDER_FRAGMENT = `
 fragment OrderFragment on orders {
   id
@@ -100,12 +102,6 @@ export type UpdateOrderItemInputVariables = {
   item_id: number
   order_id: number
   quantity: string
-}
-
-const getNextDayOfWeek = (date: Date, dayOfWeek: number) => {
-  const resultDate = new Date(date.getTime())
-  resultDate.setDate(date.getDate() + ((7 + dayOfWeek - date.getDay()) % 7))
-  return resultDate
 }
 
 export const createNextOrderFromBaseItems = (

@@ -54,7 +54,7 @@ export const OrderItemRow = ({
       </TableCell>
       <TableCell>
         <TextField
-          margin="dense"
+          margin="none"
           variant="standard"
           value={quantityValue}
           style={{ maxWidth: 70 }}

@@ -17,6 +17,7 @@ import {
 } from "./api"
 import { AddNewItemDialog, NewItem } from "./AddNewItemDialog"
 import { OrderItemRow } from "./OrderItemRow"
+import { getNextWeekDates } from "./utils"
 
 export const OngoingOrder = ({ order }: { order: Order }) => {
   const [openAddDialog, setOpenAddDialog] = React.useState(false)
@@ -31,11 +32,13 @@ export const OngoingOrder = ({ order }: { order: Order }) => {
   }
 
   const deadline = new Date(order.order_date).toLocaleDateString()
+  const { nextMonday } = getNextWeekDates(new Date(order.order_date))
 
   return (
     <>
       <Typography variant="h5" gutterBottom>
-        Beställning för , skickas: <b>{deadline}</b>
+        Beställning till <b>{nextMonday.toLocaleDateString()}</b>, deadline:{" "}
+        <b>{deadline}</b>
       </Typography>
       <Typography gutterBottom>
         Vill du ha någonting som inte finns i listan?{" "}
