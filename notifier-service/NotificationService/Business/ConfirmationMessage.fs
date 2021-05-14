@@ -3,8 +3,8 @@ module NotificationService.Business.ConfirmationMessage
 open System
 open NotificationService.Services.Types
 
-let private getNextMondayDate (date: DateTime) =
-    let daysToAdd = ((int) date.DayOfWeek - (int)DayOfWeek.Monday + 7) % 7
+let getNextMondayDate (date: DateTime) =
+    let daysToAdd = ((int) DayOfWeek.Monday - (int) date.DayOfWeek + 7) % 7
     date.AddDays((float) daysToAdd)
 
 let private formatOrderItem (item: OrderItem) =
@@ -12,7 +12,7 @@ let private formatOrderItem (item: OrderItem) =
     $"- {orderItemName}, {item.quantity}\n"
 
 let private createMessageHeader (order: Order) =
-    let orderDueDate = getNextMondayDate order.date
+    let orderDueDate = getNextMondayDate (order.date.AddDays(1.0))
     let formattedDate = orderDueDate.ToString("yyyy-MM-dd")
     $"Till {formattedDate}:\n"
 
