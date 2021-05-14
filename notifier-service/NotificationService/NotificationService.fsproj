@@ -6,7 +6,8 @@
 
   <ItemGroup>
     <Compile Include="Business\Types.fs" />
-    <Compile Include="Business\OrderConfirmationService.fs" />
+    <Compile Include="Business\ConfirmationMessage.fs" />
+    <Compile Include="Business\OrderConfirmation.fs" />
     <Compile Include="Infrastructure\OrderGraphqlApi.fs" />
     <Compile Include="Infrastructure\NotificationApi.fs" />
     <Compile Include="Controllers\NotificationController.fs" />

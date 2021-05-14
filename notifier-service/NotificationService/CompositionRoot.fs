@@ -15,7 +15,7 @@ let createCompositionRoot (OrderGraphqlApiUrl orderGraphqlApiUrl) (NotificationA
     let sendNotification = NotificationApi.sendChannelNotification notificationApiUrl
     
     let sendOrderConfirmation =
-        OrderConfirmationService.sendConfirmationForOrder sendNotification graphqlContext
+        OrderConfirmation.sendConfirmationForOrder sendNotification graphqlContext
         
     { SendOrderConfirmation = sendOrderConfirmation }
     
