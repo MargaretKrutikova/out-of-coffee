@@ -18,6 +18,7 @@ type Order = {
     id: int
     items: OrderItem list
     status: OrderStatus
+    date: DateTime
 }
 
 module Errors =

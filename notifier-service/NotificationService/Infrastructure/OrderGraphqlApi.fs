@@ -1,5 +1,6 @@
 namespace NotificationService.Services
 
+open System
 open FSharp.Data.GraphQL
 open NotificationService.Services.Types
 open NotificationService.Services.Types.Errors
@@ -24,6 +25,7 @@ module OrderGraphqlApi =
               orders_by_pk(id: $id) {
                 id
                 status
+                order_date
                 order_items {
                   item {
                     name
@@ -44,8 +46,15 @@ module OrderGraphqlApi =
                   orderData.Order_items
                   |> Seq.map (fun i -> { name = i.Item.Name; link = i.Item.Link; quantity = i.Quantity })
                   |> Seq.toList
-                  
-                let order = { id = orderData.Id; items = orderItems; status = toOrderStatus orderData.Status }
+                 
+                let orderDate = DateTime.Parse orderData.Order_date;
+                let order = {
+                  id = orderData.Id
+                  items = orderItems
+                  status = toOrderStatus orderData.Status
+                  date = orderDate
+                }
+                
                 return Ok order
           with error ->
             return Error (OrderApiError.NetworkError error)
