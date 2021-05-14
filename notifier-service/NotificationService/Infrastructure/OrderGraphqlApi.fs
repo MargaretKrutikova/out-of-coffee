@@ -1,8 +1,8 @@
-namespace NotifierService.Services
+namespace NotificationService.Services
 
 open FSharp.Data.GraphQL
-open NotifierService.Services.Types
-open NotifierService.Services.Types.Errors
+open NotificationService.Services.Types
+open NotificationService.Services.Types.Errors
 
 type OrderGraphqlProvider = GraphQLProvider<"order_schema.json">
 

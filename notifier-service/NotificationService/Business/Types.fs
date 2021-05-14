@@ -1,4 +1,4 @@
-module NotifierService.Services.Types
+module NotificationService.Services.Types
 
 type OrderItem = {
     name: string

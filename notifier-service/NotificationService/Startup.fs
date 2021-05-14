@@ -1,11 +1,11 @@
-namespace NotifierService
+namespace NotificationService
 
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
-open NotifierService.CompositionRoot
+open NotificationService.CompositionRoot
 
 type Startup(configuration: IConfiguration) =
     member _.Configuration = configuration

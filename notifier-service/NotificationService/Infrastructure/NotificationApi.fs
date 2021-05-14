@@ -1,4 +1,4 @@
-namespace NotifierService.Service
+namespace NotificationService.Service
 open System.Net
 open System.Net.Http
 open System.Text

@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "NotifierService": {
+    "NotificationService": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

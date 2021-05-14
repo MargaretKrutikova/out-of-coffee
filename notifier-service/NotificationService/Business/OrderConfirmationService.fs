@@ -1,12 +1,16 @@
-namespace NotifierService.Services
+namespace NotificationService.Services
 
 open System.Threading.Tasks
 open FSharp.Data.GraphQL
 open FsToolkit.ErrorHandling
+open NotificationService.Services.Types
 
 type OrderConfirmationError =
     | OrderNotFound
     | OrderStatusMustBeOngoing of actualStatus: string
+
+type FetchOrderById = int -> Async<Result<Order, Errors.OrderApiError>>
+type SendOrderConfirmation = int -> Async<Result<bool, OrderConfirmationError>>
 
 module OrderConfirmationService =
     let private validateOrderStatus (status: string) =
@@ -16,17 +20,10 @@ module OrderConfirmationService =
         
     let sendConfirmationForOrder
         (sendNotification: string -> Task<bool>)
-        (context: GraphQLProviderRuntimeContext)
+        (fetchOrderById: FetchOrderById)
         (orderId: int) =
         asyncResult {
-            let! result = OrderApi.fetchOrderById context orderId
-            match result.Data |> Option.bind (fun data -> data.Orders_by_pk) with
-            | Some order ->
-                do! validateOrderStatus order.Status
-                let! isSuccess = sendNotification "" |> Async.AwaitTask
-                return Ok isSuccess 
-                
-            | None ->
-                return Error OrderNotFound
+            let! result = fetchOrderById orderId
+            
         }
 
