@@ -11,6 +11,7 @@
     <Compile Include="Infrastructure\OrderGraphqlApi.fs" />
     <Compile Include="Infrastructure\NotificationApi.fs" />
     <Compile Include="CompositionRoot.fs" />
+    <Compile Include="Controllers\ErrorUtils.fs" />
     <Compile Include="Controllers\NotificationController.fs" />
     <Compile Include="Startup.fs" />
     <Compile Include="Program.fs" />
