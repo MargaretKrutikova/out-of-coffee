@@ -6,7 +6,8 @@ open NotificationService.Services.Types.Errors
 open NotificationService.Business.ConfirmationMessage
 
 type FetchOrderById = int -> Async<Result<Order, Errors.OrderApiError>>
-type SendOrderConfirmation = string -> Async<Result<unit, Errors.NotificationApiError>>
+type SendNotification = string -> Async<Result<unit, Errors.NotificationApiError>>
+type SendConfirmationForOrder = int -> Async<Result<unit, OrderConfirmationError>>
 
 module OrderConfirmation =
     let private validateOrderStatus (status: OrderStatus) =
@@ -15,16 +16,16 @@ module OrderConfirmation =
         | notAllowedStatus -> OrderStatusMustBeOngoing notAllowedStatus |> Error
         
     let sendConfirmationForOrder
-        (sendConfirmation: SendOrderConfirmation)
-        (fetchOrderById: FetchOrderById)
-        (orderId: int) =
-        asyncResult {
-            let! order = fetchOrderById orderId |> AsyncResult.mapError OrderApiError
-            do! validateOrderStatus order.status
-            
-            let confirmationMessage = createConfirmationMessageForOrder order
-            do! sendConfirmation confirmationMessage |> AsyncResult.mapError NotificationApiError
-            
-            // TODO: set order status
-        }
+        (sendNotification: SendNotification)
+        (fetchOrderById: FetchOrderById): SendConfirmationForOrder =
+        fun (orderId: int) ->
+            asyncResult {
+                let! order = fetchOrderById orderId |> AsyncResult.mapError OrderApiError
+                do! validateOrderStatus order.status
+                
+                let confirmationMessage = createConfirmationMessageForOrder order
+                do! sendNotification confirmationMessage |> AsyncResult.mapError NotificationApiError
+                
+                // TODO: set order status
+            }
 
