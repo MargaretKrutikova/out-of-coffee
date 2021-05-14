@@ -13,10 +13,12 @@ type NotificationApiUrl = NotificationApiUrl of string
 let createCompositionRoot (OrderGraphqlApiUrl orderGraphqlApiUrl) (NotificationApiUrl notificationApiUrl): CompositionRoot =
     let graphqlContext = OrderGraphqlApi.createRuntimeContext orderGraphqlApiUrl
     let fetchOrderById = OrderGraphqlApi.fetchOrderById graphqlContext
+    let setOrderStatus = OrderGraphqlApi.updateOrderStatus graphqlContext
+    
     let sendNotification = NotificationApi.sendChannelNotification notificationApiUrl
     
     let sendOrderConfirmation =
-        OrderConfirmation.sendConfirmationForOrder sendNotification fetchOrderById
+        OrderConfirmation.sendConfirmationForOrder sendNotification fetchOrderById setOrderStatus
         
     { SendOrderConfirmation = sendOrderConfirmation }
     
