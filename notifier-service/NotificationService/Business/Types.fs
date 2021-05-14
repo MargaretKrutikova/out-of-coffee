@@ -24,7 +24,7 @@ type Order = {
 module Errors =
     type OrderApiError =
         | NetworkError of Exception
-        | OrderNotFound
+        | OrderNotFound of int
         
     type NotificationApiError =
         | NetworkError of Exception

@@ -51,7 +51,7 @@ module OrderGraphqlApi =
 
                 match result.Data
                       |> Option.bind (fun d -> d.Orders_by_pk) with
-                | None -> return Error OrderApiError.OrderNotFound
+                | None -> return OrderApiError.OrderNotFound orderId |> Error
                 | Some orderData ->
                     let orderItems =
                         orderData.Order_items
@@ -70,7 +70,7 @@ module OrderGraphqlApi =
                           date = orderDate }
 
                     return Ok order
-            with error -> return Error(OrderApiError.NetworkError error)
+            with error -> return OrderApiError.NetworkError error |> Error
         }
 
     let updateOrderStatus (context: GraphQLProviderRuntimeContext) (orderStatus: OrderStatus) (orderId: int) =
@@ -90,7 +90,7 @@ module OrderGraphqlApi =
 
                 match result.Data
                       |> Option.bind (fun d -> d.Update_orders_by_pk) with
-                | None -> return Error OrderApiError.OrderNotFound
+                | None -> return OrderApiError.OrderNotFound orderId |> Error
                 | Some _ -> return Ok()
-            with error -> return Error(OrderApiError.NetworkError error)
+            with error -> return OrderApiError.NetworkError error |> Error
         }
