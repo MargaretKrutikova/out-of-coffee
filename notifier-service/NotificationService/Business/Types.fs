@@ -1,5 +1,8 @@
 module NotificationService.Services.Types
 
+open System
+open System.Net
+
 type OrderItem = {
     name: string
     link: string option
@@ -19,5 +22,16 @@ type Order = {
 
 module Errors =
     type OrderApiError =
-        | NetworkError
+        | NetworkError of Exception
         | OrderNotFound
+        
+    type NotificationApiError =
+        | NetworkError of Exception
+        | HttpRequestError of HttpStatusCode
+        | TooManyRequests
+        | ResponseCodeIsNotSuccess of code: string
+        
+    type OrderConfirmationError =
+        | OrderApiError of OrderApiError
+        | NotificationApiError of NotificationApiError
+        | OrderStatusMustBeOngoing of actualStatus: OrderStatus

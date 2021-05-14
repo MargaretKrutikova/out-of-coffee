@@ -47,6 +47,6 @@ module OrderGraphqlApi =
                   
                 let order = { id = orderData.Id; items = orderItems; status = toOrderStatus orderData.Status }
                 return Ok order
-          with _ ->
-            return Error OrderApiError.NetworkError
+          with error ->
+            return Error (OrderApiError.NetworkError error)
         }
