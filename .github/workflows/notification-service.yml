@@ -8,13 +8,12 @@ on:
   pull_request:
     branches: [master]
 
-env:
-  WORKING_DIRECTORY: notification-service/NotificationService
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ./notification-service/NotificationService
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET
