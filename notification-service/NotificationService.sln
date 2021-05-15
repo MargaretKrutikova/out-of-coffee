@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "NotificationService", "NotificationService\NotificationService.fsproj", "{E9656296-44A8-442D-B264-67466ADC93C0}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FarmerSetup", "FarmerSetup\FarmerSetup.fsproj", "{02C6B134-BFD2-4FAD-8F4C-2C755ACD8A54}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E9656296-44A8-442D-B264-67466ADC93C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9656296-44A8-442D-B264-67466ADC93C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9656296-44A8-442D-B264-67466ADC93C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9656296-44A8-442D-B264-67466ADC93C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02C6B134-BFD2-4FAD-8F4C-2C755ACD8A54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02C6B134-BFD2-4FAD-8F4C-2C755ACD8A54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02C6B134-BFD2-4FAD-8F4C-2C755ACD8A54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02C6B134-BFD2-4FAD-8F4C-2C755ACD8A54}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
