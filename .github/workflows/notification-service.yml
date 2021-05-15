@@ -3,8 +3,8 @@ name: .NET
 on:
   push:
     branches: [master]
-    paths:
-      - "notification-service/**"
+    paths-ignore:
+      - "client/**"
   pull_request:
     branches: [master]
 
