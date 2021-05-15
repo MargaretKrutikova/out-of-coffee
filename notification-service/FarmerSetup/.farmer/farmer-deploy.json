@@ -1,0 +1,119 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "outputs": {},
+  "parameters": {},
+  "resources": [
+    {
+      "apiVersion": "2020-06-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Insights/components', 'food-order-notification-service-ai')]",
+        "[resourceId('Microsoft.Web/serverfarms', 'food-order-notification-service-farm')]"
+      ],
+      "identity": {
+        "type": "None"
+      },
+      "kind": "app",
+      "location": "northeurope",
+      "name": "food-order-notification-service",
+      "properties": {
+        "httpsOnly": false,
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', 'food-order-notification-service-farm')]",
+        "siteConfig": {
+          "alwaysOn": false,
+          "appSettings": [
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.Insights/components', 'food-order-notification-service-ai'), '2014-04-01').InstrumentationKey]"
+            },
+            {
+              "name": "APPINSIGHTS_PROFILERFEATURE_VERSION",
+              "value": "1.0.0"
+            },
+            {
+              "name": "APPINSIGHTS_SNAPSHOTFEATURE_VERSION",
+              "value": "1.0.0"
+            },
+            {
+              "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
+              "value": "~2"
+            },
+            {
+              "name": "DiagnosticServices_EXTENSION_VERSION",
+              "value": "~3"
+            },
+            {
+              "name": "InstrumentationEngine_EXTENSION_VERSION",
+              "value": "~1"
+            },
+            {
+              "name": "SnapshotDebugger_EXTENSION_VERSION",
+              "value": "~1"
+            },
+            {
+              "name": "XDT_MicrosoftApplicationInsights_BaseExtensions",
+              "value": "~1"
+            },
+            {
+              "name": "XDT_MicrosoftApplicationInsights_Mode",
+              "value": "recommended"
+            }
+          ],
+          "connectionStrings": [],
+          "metadata": [
+            {
+              "name": "CURRENT_STACK",
+              "value": "dotnetcore"
+            }
+          ]
+        }
+      },
+      "tags": {},
+      "type": "Microsoft.Web/sites"
+    },
+    {
+      "apiVersion": "2014-04-01",
+      "kind": "web",
+      "location": "northeurope",
+      "name": "food-order-notification-service-ai",
+      "properties": {
+        "ApplicationId": "food-order-notification-service",
+        "Application_Type": "web",
+        "DisableIpMasking": false,
+        "SamplingPercentage": 100,
+        "name": "food-order-notification-service-ai"
+      },
+      "tags": {
+        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', 'food-order-notification-service')]": "Resource"
+      },
+      "type": "Microsoft.Insights/components"
+    },
+    {
+      "apiVersion": "2018-02-01",
+      "location": "northeurope",
+      "name": "food-order-notification-service-farm",
+      "properties": {
+        "name": "food-order-notification-service-farm",
+        "perSiteScaling": false,
+        "reserved": false
+      },
+      "sku": {
+        "capacity": 1,
+        "name": "F1",
+        "size": "0",
+        "tier": "Free"
+      },
+      "tags": {},
+      "type": "Microsoft.Web/serverfarms"
+    },
+    {
+      "apiVersion": "2020-06-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', 'food-order-notification-service')]"
+      ],
+      "location": "northeurope",
+      "name": "food-order-notification-service/Microsoft.AspNetCore.AzureAppServices.SiteExtension",
+      "type": "Microsoft.Web/sites/siteextensions"
+    }
+  ]
+}
