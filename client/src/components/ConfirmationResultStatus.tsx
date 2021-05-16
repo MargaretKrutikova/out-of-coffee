@@ -1,5 +1,4 @@
-import Typography from "@material-ui/core/Typography"
-import CircularProgress from "@material-ui/core/CircularProgress"
+import Alert from "@material-ui/lab/Alert"
 
 import { ConfirmationResult } from "../api/confirmationApi"
 
@@ -14,11 +13,12 @@ export type ConfirmationResultState =
 
 export const ConfirmationResultStatus = ({ state }: Props) => {
   if (state.kind === "idle") return null
-  if (state.kind === "loading") return <CircularProgress size={20} />
+  if (state.kind === "loading")
+    return <Alert severity="info">Sending confirmation</Alert>
 
   return state.result.kind === "error" ? (
-    <Typography variant="subtitle1">{state.result.error}</Typography>
+    <Alert severity="error">{state.result.error}</Alert>
   ) : (
-    <Typography>Confirmation sent</Typography>
+    <Alert severity="success">Confirmation sent</Alert>
   )
 }
