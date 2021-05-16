@@ -13,10 +13,9 @@ import {
   CREATE_ORDER_MUTATION,
   CreateOrderInputVariables,
   Order,
-  generateOrderMessage,
 } from "./api"
-import { OngoingOrder } from "./OngoingOrder"
-import { AvailableItems } from "./AvailableItems"
+import { OngoingOrder } from "./components/OngoingOrder"
+import { AvailableItems } from "./components/AvailableItems"
 
 const CurrentOrder = ({
   order,
@@ -58,28 +57,21 @@ export const CurrentOrderPage = () => {
       {data.orders.length > 0 ? (
         <CurrentOrder order={data.orders[0]} allItems={data.items} />
       ) : (
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          onClick={() =>
-            createNextOrderFromBaseItems(data.base_order, createOrder).then(
-              refetchOrder
-            )
-          }
-        >
-          Skapa beställning
-        </Button>
+        <Box margin={4}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            onClick={() =>
+              createNextOrderFromBaseItems(data.base_order, createOrder).then(
+                refetchOrder
+              )
+            }
+          >
+            Skapa beställning
+          </Button>
+        </Box>
       )}
-      <Box margin={4}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={generateOrderMessage}
-        >
-          Generera meddelande
-        </Button>
-      </Box>
     </Container>
   )
 }

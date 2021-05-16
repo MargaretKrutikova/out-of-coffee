@@ -14,10 +14,10 @@ import {
   ADD_ORDER_ITEM_MUTATION,
   Order,
   AddOrderItemInputVariables,
-} from "./api"
+} from "../api"
 import { AddNewItemDialog, NewItem } from "./AddNewItemDialog"
 import { OrderItemRow } from "./OrderItemRow"
-import { getNextWeekDates } from "./utils"
+import { getNextWeekDates } from "../utils"
 
 export const OngoingOrder = ({ order }: { order: Order }) => {
   const [openAddDialog, setOpenAddDialog] = React.useState(false)
