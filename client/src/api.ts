@@ -1,5 +1,5 @@
-import { client } from "./graphqlClient"
-import { getNextDayOfWeek } from "./utils"
+import { getNextDayOfWeek } from "./functions/orderDates"
+import { OrderStatus } from "./functions/orderStatus"
 
 const ORDER_FRAGMENT = `
 fragment OrderFragment on orders {
@@ -36,6 +36,16 @@ export const MAIN_QUERY = `
     }
   }
   ${ORDER_FRAGMENT}
+`
+
+export const ADMIN_ORDERS = `
+  query FetchOrders {
+    orders(order_by: {order_date: desc}, limit: 5) {
+      order_date
+      id
+      status
+    }
+  }
 `
 
 export const FETCH_CURRENT_ORDER = `
@@ -83,11 +93,6 @@ export const DELETE_ORDER_ITEM_MUTATION = `
   }
 `
 
-export enum OrderStatus {
-  Ongoing = "ongoing",
-  Delivered = "delivered",
-}
-
 export type CreateOrderInputVariables = {
   order_date: string
   status: OrderStatus
@@ -112,7 +117,7 @@ export const createNextOrderFromBaseItems = (
   items: BaseItem[],
   createOrder: (input: CreateOrderInputVariables) => Promise<any>
 ) => {
-  // I order every Thursday, okay?
+  // I order every Thursday
   const thursdayDay = 4
   const nextThursday = getNextDayOfWeek(new Date(), thursdayDay)
   const baseItems = items.map(({ item_id, quantity }) => ({
@@ -156,24 +161,12 @@ export type MainQuery = {
   orders: Order[]
 }
 
-const formatItem = ({ item, quantity }: OrderItem) => {
-  const name =
-    !!item.link && item.link.indexOf("mat.se") > 0 ? item.link : item.name
-  return `- ${name}, ${quantity}\n`
+export type AdminOrder = {
+  id: number
+  order_date: string
+  status: string
 }
 
-export const generateOrderMessage = () => {
-  client
-    .query(FETCH_CURRENT_ORDER)
-    .toPromise()
-    .then((result) => {
-      if (!result.data || result.data.orders.length === 0) {
-        console.error("Error")
-      } else {
-        const order = result.data.orders[0] as Order
-
-        const message = order.order_items.map(formatItem).join("")
-        console.log(message)
-      }
-    })
+export type AdminOrdersQuery = {
+  orders: AdminOrder[]
 }
