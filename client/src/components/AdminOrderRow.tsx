@@ -1,18 +1,20 @@
 import React from "react"
 import TableCell from "@material-ui/core/TableCell"
 import TableRow from "@material-ui/core/TableRow"
-import DeleteIcon from "@material-ui/icons/Delete"
 import { IconButton } from "@material-ui/core"
 import Typography from "@material-ui/core/Typography"
 import { makeStyles } from "@material-ui/core/styles"
+import MailOutline from "@material-ui/icons/MailOutline"
+import CircularProgress from "@material-ui/core/CircularProgress"
 
 import { AdminOrder } from "../api/orderApi"
 import { formatDateStr, getOrderDeliveryDate } from "../functions/orderDates"
 import { OrderStatus, toOrderStatus } from "../functions/orderStatus"
-import { ConfirmationResult, sendConfirmation } from "../api/confirmationApi"
 
 type Props = {
   order: AdminOrder
+  sendOrderConfirmation: (order: AdminOrder) => void
+  confirmationPending: boolean
 }
 
 const orderStatusToColor = (status: OrderStatus) => {
@@ -32,17 +34,15 @@ const useStyles = makeStyles({
   }),
 })
 
-export const AdminOrderRow = ({ order }: Props) => {
+export const AdminOrderRow = ({
+  order,
+  sendOrderConfirmation,
+  confirmationPending,
+}: Props) => {
   const orderDeliverDate = getOrderDeliveryDate(order.order_date)
   const orderStatus = toOrderStatus(order.status)
 
   const styles = useStyles({ status: orderStatus })
-  const [state, setState] = React.useState<ConfirmationResult | undefined>()
-
-  const sendOrderConfirmation = async () => {
-    const result = await sendConfirmation(order.id)
-    setState(result)
-  }
 
   return (
     <TableRow>
@@ -50,21 +50,22 @@ export const AdminOrderRow = ({ order }: Props) => {
         <Typography variant="h6">{formatDateStr(orderDeliverDate)}</Typography>
       </TableCell>
       <TableCell align="center">
-        <Typography className={styles.orderStatusText} variant="h6">
+        <Typography className={styles.orderStatusText} variant="subtitle2">
           {order.status}
         </Typography>
       </TableCell>
-      <TableCell component="th" scope="row">
-        <IconButton
-          size="small"
-          color="primary"
-          onClick={sendOrderConfirmation}
-        >
-          <DeleteIcon />
-        </IconButton>
-      </TableCell>
-      <TableCell>
-        {state && (state.kind == "error" ? state.error : "success")}
+      <TableCell component="th" scope="row" align="center">
+        {confirmationPending ? (
+          <CircularProgress size={20} />
+        ) : orderStatus === OrderStatus.Ongoing ? (
+          <IconButton
+            size="small"
+            color="primary"
+            onClick={() => sendOrderConfirmation(order)}
+          >
+            <MailOutline />
+          </IconButton>
+        ) : null}
       </TableCell>
     </TableRow>
   )
