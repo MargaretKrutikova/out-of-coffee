@@ -23,7 +23,7 @@ import {
 import { sendConfirmationToApi } from "./api/confirmationApi"
 
 export const AdminPage = () => {
-  const [result, refetchOrder] = useQuery<AdminOrdersQuery>({
+  const [result, refetchAdminOrders] = useQuery<AdminOrdersQuery>({
     query: ADMIN_ORDERS,
   })
   const [state, setState] = React.useState<ConfirmationResultState>({
@@ -33,7 +33,11 @@ export const AdminPage = () => {
   const sendOrderConfirmation = async (order: AdminOrder) => {
     setState({ kind: "loading", orderId: order.id })
     const result = await sendConfirmationToApi(order.id)
+
     setState({ kind: "done", result })
+    if (result.kind === "success") {
+      refetchAdminOrders({ requestPolicy: "network-only" })
+    }
   }
 
   const { data, fetching, error } = result
@@ -45,7 +49,7 @@ export const AdminPage = () => {
     <Container component="main" maxWidth="sm">
       <CssBaseline />
 
-      <Box paddingTop={4}>
+      <Box paddingTop={1}>
         <Box height="40px" marginBottom={2}>
           <ConfirmationResultStatus state={state} />
         </Box>

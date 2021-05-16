@@ -64,7 +64,7 @@ export const CurrentOrderPage = () => {
             color="primary"
             onClick={() =>
               createNextOrderFromBaseItems(data.base_order, createOrder).then(
-                refetchOrder
+                () => refetchOrder({ requestPolicy: "network-only" })
               )
             }
           >

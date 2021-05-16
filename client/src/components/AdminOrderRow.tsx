@@ -31,6 +31,7 @@ const orderStatusToColor = (status: OrderStatus) => {
 const useStyles = makeStyles({
   orderStatusText: (props: { status: OrderStatus }) => ({
     backgroundColor: orderStatusToColor(props.status),
+    borderRadius: 12,
   }),
 })
 
@@ -50,7 +51,7 @@ export const AdminOrderRow = ({
         <Typography variant="h6">{formatDateStr(orderDeliverDate)}</Typography>
       </TableCell>
       <TableCell align="center">
-        <Typography className={styles.orderStatusText} variant="subtitle2">
+        <Typography variant="h6" className={styles.orderStatusText}>
           {order.status}
         </Typography>
       </TableCell>
