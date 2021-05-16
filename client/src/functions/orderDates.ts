@@ -24,3 +24,6 @@ export const getOrderDeliveryDate = (orderDateStr: string) => {
 
 export const formatDateStr = (orderDateStr: string | Date) =>
   new Date(orderDateStr).toLocaleDateString()
+
+export const formatWithMonthStr = (dateStr: string | Date) =>
+  new Date(dateStr).toDateString().split(" ").slice(1).join(" ")

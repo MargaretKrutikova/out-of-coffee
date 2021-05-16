@@ -68,9 +68,10 @@ export const AdminPage = () => {
                   key={order.id}
                   order={order}
                   sendOrderConfirmation={sendOrderConfirmation}
-                  confirmationPending={
+                  isLoading={
                     state.kind === "loading" && order.id === state.orderId
                   }
+                  markDelivered={() => {}}
                 />
               ))}
             </TableBody>
