@@ -1,3 +1,4 @@
+import React from "react"
 import TableCell from "@material-ui/core/TableCell"
 import TableRow from "@material-ui/core/TableRow"
 import DeleteIcon from "@material-ui/icons/Delete"
@@ -8,6 +9,7 @@ import { makeStyles } from "@material-ui/core/styles"
 import { AdminOrder } from "../api/orderApi"
 import { formatDateStr, getOrderDeliveryDate } from "../functions/orderDates"
 import { OrderStatus, toOrderStatus } from "../functions/orderStatus"
+import { ConfirmationResult, sendConfirmation } from "../api/confirmationApi"
 
 type Props = {
   order: AdminOrder
@@ -35,6 +37,12 @@ export const AdminOrderRow = ({ order }: Props) => {
   const orderStatus = toOrderStatus(order.status)
 
   const styles = useStyles({ status: orderStatus })
+  const [state, setState] = React.useState<ConfirmationResult | undefined>()
+
+  const sendOrderConfirmation = async () => {
+    const result = await sendConfirmation(order.id)
+    setState(result)
+  }
 
   return (
     <TableRow>
@@ -47,9 +55,16 @@ export const AdminOrderRow = ({ order }: Props) => {
         </Typography>
       </TableCell>
       <TableCell component="th" scope="row">
-        <IconButton size="small" color="primary">
+        <IconButton
+          size="small"
+          color="primary"
+          onClick={sendOrderConfirmation}
+        >
           <DeleteIcon />
         </IconButton>
+      </TableCell>
+      <TableCell>
+        {state && (state.kind == "error" ? state.error : "success")}
       </TableCell>
     </TableRow>
   )
