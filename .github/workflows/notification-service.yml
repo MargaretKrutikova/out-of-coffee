@@ -6,8 +6,6 @@ name: Build and deploy
 on:
   push:
     branches: [ master ]
-    paths-ignore:
-      - "client/**"
   pull_request:
     branches: [ master ]
   workflow_dispatch:
