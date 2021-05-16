@@ -5,13 +5,11 @@ name: Build and deploy
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
     paths-ignore:
       - "client/**"
   pull_request:
-    branches:
-      - master
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
