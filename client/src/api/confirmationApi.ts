@@ -17,14 +17,13 @@ export const sendConfirmationToApi = async (
   try {
     const response = await fetch(getConfirmationApiUrl(orderId), requestOptions)
 
-    const isJson = response.headers
-      .get("content-type")
-      ?.includes("application/json")
+    const isJson = response.headers.get("content-type")?.includes("text/plain")
 
-    const data = isJson && (await response.json())
+    const data = isJson && (await response.text())
+
     if (!response.ok) {
       // get error message from body or default to response status
-      const error = (data && data.message) || response.statusText
+      const error = data || response.statusText
       return { kind: "error", error }
     }
     return { kind: "success" }
