@@ -1,15 +1,13 @@
 const baseUrl = process.env.REACT_APP_CONFIRMATION_API_URL as string
 
 const getConfirmationApiUrl = (orderId: number) =>
-  `${
-    process.env.REACT_APP_CONFIRMATION_API_URL as string
-  }/notification/order/${orderId}/send-confirmations`
+  `${baseUrl}/notification/order/${orderId}/send-confirmation`
 
 export type ConfirmationResult =
   | { kind: "success" }
   | { kind: "error"; error: string }
 
-export const sendConfirmation = async (
+export const sendConfirmationToApi = async (
   orderId: number
 ): Promise<ConfirmationResult> => {
   const requestOptions = {
