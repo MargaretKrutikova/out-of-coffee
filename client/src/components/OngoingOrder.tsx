@@ -14,10 +14,10 @@ import {
   ADD_ORDER_ITEM_MUTATION,
   Order,
   AddOrderItemInputVariables,
-} from "./api"
+} from "../api/orderApi"
 import { AddNewItemDialog, NewItem } from "./AddNewItemDialog"
 import { OrderItemRow } from "./OrderItemRow"
-import { getNextWeekDates } from "./utils"
+import { formatDateStr, getOrderDeliveryDate } from "../functions/orderDates"
 
 export const OngoingOrder = ({ order }: { order: Order }) => {
   const [openAddDialog, setOpenAddDialog] = React.useState(false)
@@ -31,13 +31,13 @@ export const OngoingOrder = ({ order }: { order: Order }) => {
     setOpenAddDialog(false)
   }
 
-  const deadline = new Date(order.order_date).toLocaleDateString()
-  const { nextMonday } = getNextWeekDates(new Date(order.order_date))
+  const deadline = formatDateStr(order.order_date)
+  const orderDeliveryDate = getOrderDeliveryDate(order.order_date)
 
   return (
     <>
       <Typography variant="h5" gutterBottom>
-        Beställning till <b>{nextMonday.toLocaleDateString()}</b>, deadline:{" "}
+        Beställning till <b>{formatDateStr(orderDeliveryDate)}</b>, deadline:{" "}
         <b>{deadline}</b>
       </Typography>
       <Typography gutterBottom>
