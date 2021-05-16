@@ -1,6 +1,7 @@
 namespace NotificationService
 
 open Microsoft.AspNetCore.Builder
+open Microsoft.AspNetCore.Cors.Infrastructure
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
@@ -8,6 +9,14 @@ open Microsoft.Extensions.Hosting
 open NotificationService.CompositionRoot
 
 type Startup(configuration: IConfiguration) =
+    let configureCors (builder : CorsPolicyBuilder) =
+        builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+             |> ignore
+    let originsPolicy = "_originsPolicy"
+    
     member _.Configuration = configuration
 
     // This method gets called by the runtime. Use this method to add services to the container.
@@ -17,6 +26,8 @@ type Startup(configuration: IConfiguration) =
 
         let compositionRoot = createCompositionRoot (OrderGraphqlApiUrl orderGraphqlApi) (NotificationApiUrl notificationApi)
         
+        services.AddCors(fun options -> options.AddPolicy(originsPolicy, configureCors)
+        ) |> ignore
         services.AddSingleton<CompositionRoot>(compositionRoot) |> ignore
         services.AddControllers() |> ignore
 
@@ -26,6 +37,7 @@ type Startup(configuration: IConfiguration) =
             app.UseDeveloperExceptionPage() |> ignore
         app.UseHttpsRedirection()
            .UseRouting()
+           .UseCors(originsPolicy)
            .UseAuthorization()
            .UseEndpoints(fun endpoints ->
                 endpoints.MapControllers() |> ignore
