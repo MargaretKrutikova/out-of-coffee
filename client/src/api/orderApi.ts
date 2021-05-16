@@ -93,6 +93,15 @@ export const DELETE_ORDER_ITEM_MUTATION = `
   }
 `
 
+export const UPDATE_ORDER_STATUS = `
+  mutation UpdateOrderStatus($order_id: Int!, $status: String!) {
+    update_orders_by_pk(pk_columns: {id: $order_id}, _set: {status: $status}) {
+      id
+      status
+    }
+  }
+`
+
 export type CreateOrderInputVariables = {
   order_date: string
   status: OrderStatus
@@ -111,6 +120,11 @@ export type UpdateOrderItemInputVariables = {
   item_id: number
   order_id: number
   quantity: string
+}
+
+export type UpdateOrderStatusInputVariables = {
+  order_id: number
+  status: string
 }
 
 export const createNextOrderFromBaseItems = (

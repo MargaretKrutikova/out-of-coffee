@@ -11,21 +11,33 @@ import TableRow from "@material-ui/core/TableRow"
 import Paper from "@material-ui/core/Paper"
 import Box from "@material-ui/core/Box"
 
-import { useQuery } from "urql"
+import { useMutation, useQuery } from "urql"
 
 import "./App.css"
-import { AdminOrdersQuery, AdminOrder, ADMIN_ORDERS } from "./api/orderApi"
+import {
+  AdminOrdersQuery,
+  AdminOrder,
+  ADMIN_ORDERS,
+  UPDATE_ORDER_STATUS,
+  UpdateOrderStatusInputVariables,
+} from "./api/orderApi"
 import { AdminOrderRow } from "./components/AdminOrderRow"
 import {
   ConfirmationResultState,
   ConfirmationResultStatus,
 } from "./components/ConfirmationResultStatus"
 import { sendConfirmationToApi } from "./api/confirmationApi"
+import { OrderStatus } from "./functions/orderStatus"
 
 export const AdminPage = () => {
   const [result, refetchAdminOrders] = useQuery<AdminOrdersQuery>({
     query: ADMIN_ORDERS,
   })
+  const [, updateOrderStatus] =
+    useMutation<any, UpdateOrderStatusInputVariables>(UPDATE_ORDER_STATUS)
+  const markOrderDelivered = (order: AdminOrder) =>
+    updateOrderStatus({ order_id: order.id, status: OrderStatus.Delivered })
+
   const [state, setState] = React.useState<ConfirmationResultState>({
     kind: "idle",
   })
@@ -71,7 +83,7 @@ export const AdminPage = () => {
                   isLoading={
                     state.kind === "loading" && order.id === state.orderId
                   }
-                  markDelivered={() => {}}
+                  markDelivered={markOrderDelivered}
                 />
               ))}
             </TableBody>
