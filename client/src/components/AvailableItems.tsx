@@ -14,7 +14,7 @@ import {
   UpdateOrderItemInputVariables,
   UPDATE_ORDER_ITEM_MUTATION,
   Item,
-} from "../api"
+} from "../api/orderApi"
 
 const useStyles = makeStyles({
   table: {},

@@ -1,5 +1,5 @@
-import { getNextDayOfWeek } from "./functions/orderDates"
-import { OrderStatus } from "./functions/orderStatus"
+import { getNextDayOfWeek } from "../functions/orderDates"
+import { OrderStatus } from "../functions/orderStatus"
 
 const ORDER_FRAGMENT = `
 fragment OrderFragment on orders {

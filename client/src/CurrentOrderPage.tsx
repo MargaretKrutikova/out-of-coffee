@@ -13,7 +13,7 @@ import {
   CREATE_ORDER_MUTATION,
   CreateOrderInputVariables,
   Order,
-} from "./api"
+} from "./api/orderApi"
 import { OngoingOrder } from "./components/OngoingOrder"
 import { AvailableItems } from "./components/AvailableItems"
 

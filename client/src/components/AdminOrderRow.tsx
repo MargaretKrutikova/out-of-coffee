@@ -5,7 +5,7 @@ import { IconButton } from "@material-ui/core"
 import Typography from "@material-ui/core/Typography"
 import { makeStyles } from "@material-ui/core/styles"
 
-import { AdminOrder } from "../api"
+import { AdminOrder } from "../api/orderApi"
 import { formatDateStr, getOrderDeliveryDate } from "../functions/orderDates"
 import { OrderStatus, toOrderStatus } from "../functions/orderStatus"
 

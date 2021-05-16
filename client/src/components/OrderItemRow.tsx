@@ -11,7 +11,7 @@ import {
   UPDATE_ORDER_ITEM_MUTATION,
   OrderItem,
   UpdateOrderItemInputVariables,
-} from "../api"
+} from "../api/orderApi"
 
 type Props = {
   orderItem: OrderItem

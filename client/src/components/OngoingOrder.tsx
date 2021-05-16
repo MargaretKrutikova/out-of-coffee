@@ -14,7 +14,7 @@ import {
   ADD_ORDER_ITEM_MUTATION,
   Order,
   AddOrderItemInputVariables,
-} from "../api"
+} from "../api/orderApi"
 import { AddNewItemDialog, NewItem } from "./AddNewItemDialog"
 import { OrderItemRow } from "./OrderItemRow"
 import { formatDateStr, getOrderDeliveryDate } from "../functions/orderDates"

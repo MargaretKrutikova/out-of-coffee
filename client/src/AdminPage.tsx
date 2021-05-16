@@ -12,7 +12,7 @@ import Box from "@material-ui/core/Box"
 import { useQuery } from "urql"
 
 import "./App.css"
-import { AdminOrdersQuery, ADMIN_ORDERS } from "./api"
+import { AdminOrdersQuery, ADMIN_ORDERS } from "./api/orderApi"
 import { AdminOrderRow } from "./components/AdminOrderRow"
 
 export const AdminPage = () => {
