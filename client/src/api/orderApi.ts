@@ -1,4 +1,4 @@
-import { getNextDayOfWeek } from "../functions/orderDates"
+import { getNextDayOfWeek, toApiDateString } from "../functions/orderDates"
 import { OrderStatus } from "../functions/orderStatus"
 
 const ORDER_FRAGMENT = `
@@ -140,7 +140,7 @@ export const createNextOrderFromBaseItems = (
   }))
 
   return createOrder({
-    order_date: nextThursday.toLocaleDateString(),
+    order_date: toApiDateString(nextThursday),
     status: OrderStatus.Ongoing,
     order_items: { data: baseItems },
   })

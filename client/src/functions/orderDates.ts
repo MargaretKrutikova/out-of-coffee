@@ -27,3 +27,6 @@ export const formatDateStr = (orderDateStr: string | Date) =>
 
 export const formatWithMonthStr = (dateStr: string | Date) =>
   new Date(dateStr).toDateString().split(" ").slice(1).join(" ")
+
+export const toApiDateString = (date: Date) =>
+  date.toISOString().substring(0, 10)
