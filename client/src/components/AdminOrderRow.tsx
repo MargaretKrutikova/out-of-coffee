@@ -1,33 +1,33 @@
-import TableCell from "@material-ui/core/TableCell"
-import TableRow from "@material-ui/core/TableRow"
-import Typography from "@material-ui/core/Typography"
-import { makeStyles } from "@material-ui/core/styles"
+import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
 
-import { AdminOrder } from "../api/orderApi"
+import { AdminOrder } from "../api/adminApi";
 import {
   formatWithMonthStr,
   getOrderDeliveryDate,
-} from "../functions/orderDates"
-import { OrderStatus, toOrderStatus } from "../functions/orderStatus"
-import { AdminOrderAction } from "./AdminOrderAction"
+} from "../functions/orderDates";
+import { OrderStatus, toOrderStatus } from "../functions/orderStatus";
+import { AdminOrderAction } from "./AdminOrderAction";
 
 type Props = {
-  order: AdminOrder
-  sendOrderConfirmation: (order: AdminOrder) => void
-  markDelivered: (order: AdminOrder) => void
-  isLoading: boolean
-}
+  order: AdminOrder;
+  sendOrderConfirmation: (order: AdminOrder) => void;
+  markDelivered: (order: AdminOrder) => void;
+  isLoading: boolean;
+};
 
 const orderStatusToColor = (status: OrderStatus) => {
   switch (status) {
     case OrderStatus.Ongoing:
-      return "yellow"
+      return "yellow";
     case OrderStatus.Pending:
-      return "orange"
+      return "orange";
     case OrderStatus.Delivered:
-      return "green"
+      return "green";
   }
-}
+};
 
 const useStyles = makeStyles({
   orderStatusText: (props: { status: OrderStatus }) => ({
@@ -44,7 +44,7 @@ const useStyles = makeStyles({
     fontSize: 16,
     padding: "0 10px",
   },
-})
+});
 
 export const AdminOrderRow = ({
   order,
@@ -52,10 +52,10 @@ export const AdminOrderRow = ({
   markDelivered,
   isLoading,
 }: Props) => {
-  const orderDeliverDate = getOrderDeliveryDate(order.order_date)
-  const orderStatus = toOrderStatus(order.status)
+  const orderDeliverDate = getOrderDeliveryDate(order.order_date);
+  const orderStatus = toOrderStatus(order.status);
 
-  const styles = useStyles({ status: orderStatus })
+  const styles = useStyles({ status: orderStatus });
 
   return (
     <TableRow>
@@ -83,5 +83,5 @@ export const AdminOrderRow = ({
         />
       </TableCell>
     </TableRow>
-  )
-}
+  );
+};

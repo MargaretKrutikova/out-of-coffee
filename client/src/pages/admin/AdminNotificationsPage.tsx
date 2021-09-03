@@ -17,7 +17,7 @@ import {
   ADMIN_ORDERS,
   UPDATE_ORDER_STATUS,
   UpdateOrderStatusInputVariables,
-} from "api/orderApi";
+} from "api/adminApi";
 import { AdminOrderRow } from "components/AdminOrderRow";
 import {
   ConfirmationResultState,
@@ -27,7 +27,7 @@ import { sendConfirmationToApi } from "api/confirmationApi";
 import { OrderStatus } from "functions/orderStatus";
 import { PageContainer } from "components/layout/PageContainer";
 
-export const AdminPage = () => {
+export const AdminNotificationsPage = () => {
   const [result, refetchAdminOrders] = useQuery<AdminOrdersQuery>({
     query: ADMIN_ORDERS,
   });

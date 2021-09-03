@@ -38,16 +38,6 @@ export const MAIN_QUERY = `
   ${ORDER_FRAGMENT}
 `;
 
-export const ADMIN_ORDERS = `
-  query FetchOrders {
-    orders(order_by: {order_date: desc}, limit: 5) {
-      order_date
-      id
-      status
-    }
-  }
-`;
-
 export const FETCH_CURRENT_ORDER = `
   query CurrentOrder {
     orders(limit: 1, where: {status: {_eq: "ongoing"}}) {
@@ -98,15 +88,6 @@ export const DELETE_ORDER_ITEM_MUTATION = `
   ${ORDER_FRAGMENT}
 `;
 
-export const UPDATE_ORDER_STATUS = `
-  mutation UpdateOrderStatus($order_id: Int!, $status: String!) {
-    update_orders_by_pk(pk_columns: {id: $order_id}, _set: {status: $status}) {
-      id
-      status
-    }
-  }
-`;
-
 export type CreateOrderInputVariables = {
   order_date: string;
   status: OrderStatus;
@@ -125,11 +106,6 @@ export type UpdateOrderItemInputVariables = {
   item_id: number;
   order_id: number;
   quantity: string;
-};
-
-export type UpdateOrderStatusInputVariables = {
-  order_id: number;
-  status: string;
 };
 
 export const createNextOrderFromBaseItems = (
@@ -178,14 +154,4 @@ export type MainQuery = {
   base_order: BaseItem[];
   items: Item[];
   orders: Order[];
-};
-
-export type AdminOrder = {
-  id: number;
-  order_date: string;
-  status: string;
-};
-
-export type AdminOrdersQuery = {
-  orders: AdminOrder[];
 };

@@ -4,9 +4,10 @@ import { AppBar } from "components/navigation/AppBar";
 
 import { NotFoundPage } from "pages/NotFoundPage";
 import { HomePage } from "pages/home/HomePage";
-import { Routes } from "./routes";
+import { AdminRoutes, Routes } from "./routes";
 import { CurrentOrderPage } from "pages/currentOrder/CurrentOrderPage";
-import { AdminPage } from "pages/admin/AdminPage";
+import { AdminNotificationsPage } from "pages/admin/AdminNotificationsPage";
+import { AdminBaseOrderPage } from "../pages/admin/AdminBaseOrderPage";
 
 type Props = {
   appTitle: string;
@@ -18,8 +19,18 @@ export const AppRouter = (props: Props) => (
     <Switch>
       <Route exact path={Routes.HOME} component={HomePage} />
       <Route exact path={Routes.ONGOING_ORDER} component={CurrentOrderPage} />
-      <Route exact path={Routes.ADMIN} component={AdminPage} />
 
+      <Route
+        exact
+        path={AdminRoutes.NOTIFICATIONS}
+        component={AdminNotificationsPage}
+      />
+
+      <Route
+        exact
+        path={AdminRoutes.BASE_ORDER}
+        component={AdminBaseOrderPage}
+      />
       <Route path="*" component={NotFoundPage} />
     </Switch>
   </Router>

@@ -1,4 +1,4 @@
-import { Routes } from "routes/routes";
+import { AdminRoutes, Routes } from "routes/routes";
 
 import { NavLink } from "react-router-dom";
 
@@ -12,7 +12,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import HistoryIcon from "@material-ui/icons/History";
 import ListIcon from "@material-ui/icons/List";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-
+import { ListSubheader } from "@material-ui/core";
+import ListAltIcon from "@material-ui/icons/ListAlt";
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -94,17 +95,34 @@ export const AppMenu = (props: Props) => {
 
         <Divider className={classes.drawerListDivider} />
 
-        <ListItem
-          button
-          component={NavLink}
-          to={Routes.ADMIN}
-          onClick={toggleDrawer(false)}
+        <List
+          component="div"
+          disablePadding
+          subheader={<ListSubheader component="div">Admin</ListSubheader>}
         >
-          <ListItemIcon>
-            <NotificationsIcon />
-          </ListItemIcon>
-          <ListItemText primary="Admin" secondary="Order notifications" />
-        </ListItem>
+          <ListItem
+            button
+            component={NavLink}
+            to={AdminRoutes.NOTIFICATIONS}
+            onClick={toggleDrawer(false)}
+          >
+            <ListItemIcon>
+              <NotificationsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Order notifications" />
+          </ListItem>
+          <ListItem
+            button
+            component={NavLink}
+            to={AdminRoutes.BASE_ORDER}
+            onClick={toggleDrawer(false)}
+          >
+            <ListItemIcon>
+              <ListAltIcon />
+            </ListItemIcon>
+            <ListItemText primary="Base order" />
+          </ListItem>
+        </List>
       </List>
     </SwipeableDrawer>
   );

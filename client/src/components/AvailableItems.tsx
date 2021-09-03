@@ -1,39 +1,29 @@
-import Table from "@material-ui/core/Table"
-import TableBody from "@material-ui/core/TableBody"
-import TableCell from "@material-ui/core/TableCell"
-import TableContainer from "@material-ui/core/TableContainer"
-import TableHead from "@material-ui/core/TableHead"
-import TableRow from "@material-ui/core/TableRow"
-import Paper from "@material-ui/core/Paper"
-import { makeStyles } from "@material-ui/core/styles"
-import AddIcon from "@material-ui/icons/Add"
-import { IconButton, Typography } from "@material-ui/core"
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import { makeStyles } from "@material-ui/core/styles";
+import AddIcon from "@material-ui/icons/Add";
+import { IconButton, Typography } from "@material-ui/core";
 
-import { useMutation } from "urql"
-import {
-  UpdateOrderItemInputVariables,
-  UPDATE_ORDER_ITEM_MUTATION,
-  Item,
-} from "../api/orderApi"
+import { Item } from "../api/orderApi";
 
 const useStyles = makeStyles({
   table: {},
-})
+});
 
-export const AvailableItems = (props: { items: Item[]; orderId: number }) => {
-  const classes = useStyles()
+type Props = {
+  items: Item[];
+  addItemToOrder: (itemId: number, quantity: string) => void;
+};
 
-  const [, updateOrderItem] = useMutation<any, UpdateOrderItemInputVariables>(
-    UPDATE_ORDER_ITEM_MUTATION
-  )
-  const defaultQuantity = "1 st"
+export const AvailableItems = (props: Props) => {
+  const classes = useStyles();
 
-  const addItemToOrder = (itemId: number) =>
-    updateOrderItem({
-      item_id: itemId,
-      order_id: props.orderId,
-      quantity: defaultQuantity,
-    })
+  const defaultQuantity = "1 st";
 
   return (
     <>
@@ -54,7 +44,9 @@ export const AvailableItems = (props: { items: Item[]; orderId: number }) => {
                 <TableCell component="th" scope="row">
                   <IconButton
                     size="small"
-                    onClick={() => addItemToOrder(item.id)}
+                    onClick={() =>
+                      props.addItemToOrder(item.id, defaultQuantity)
+                    }
                     color="primary"
                   >
                     <AddIcon />
@@ -74,5 +66,5 @@ export const AvailableItems = (props: { items: Item[]; orderId: number }) => {
         </Table>
       </TableContainer>
     </>
-  )
-}
+  );
+};
