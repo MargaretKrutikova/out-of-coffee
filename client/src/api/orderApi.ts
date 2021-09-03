@@ -1,5 +1,5 @@
-import { getNextDayOfWeek, toApiDateString } from "../functions/orderDates"
-import { OrderStatus } from "../functions/orderStatus"
+import { getNextDayOfWeek, toApiDateString } from "../functions/orderDates";
+import { OrderStatus } from "../functions/orderStatus";
 
 const ORDER_FRAGMENT = `
 fragment OrderFragment on orders {
@@ -15,7 +15,7 @@ fragment OrderFragment on orders {
     quantity
   }
 }
-`
+`;
 
 export const MAIN_QUERY = `
   query MainQuery {
@@ -36,7 +36,7 @@ export const MAIN_QUERY = `
     }
   }
   ${ORDER_FRAGMENT}
-`
+`;
 
 export const ADMIN_ORDERS = `
   query FetchOrders {
@@ -46,7 +46,7 @@ export const ADMIN_ORDERS = `
       status
     }
   }
-`
+`;
 
 export const FETCH_CURRENT_ORDER = `
   query CurrentOrder {
@@ -55,7 +55,7 @@ export const FETCH_CURRENT_ORDER = `
     }
   }
   ${ORDER_FRAGMENT}
-`
+`;
 
 export const CREATE_ORDER_MUTATION = `
  mutation CreateOrder($order_date: timestamp!, $status: String!, $order_items: order_items_arr_rel_insert_input!) {
@@ -66,7 +66,7 @@ export const CREATE_ORDER_MUTATION = `
   }
  }
  ${ORDER_FRAGMENT}
-`
+`;
 
 export const UPDATE_ORDER_ITEM_MUTATION = `
   mutation UpdateOrderItem($item_id: Int!, $order_id: Int!, $quantity: String!) {
@@ -75,7 +75,7 @@ export const UPDATE_ORDER_ITEM_MUTATION = `
         item_id
     }
   }
-`
+`;
 
 export const ADD_ORDER_ITEM_MUTATION = `
   mutation AddOrderItem($category: String!, $link: String!, $name: String!, $quantity: String!, $order_id: Int!) {
@@ -83,15 +83,20 @@ export const ADD_ORDER_ITEM_MUTATION = `
       order_id
     }
   }
-`
+`;
 
 export const DELETE_ORDER_ITEM_MUTATION = `
   mutation DeleteOrderItem($itemId: Int!, $orderId: Int!) {
     delete_order_items(where: {item_id: {_eq: $itemId}, order_id: {_eq: $orderId}}) {
-      affected_rows
+      returning {
+        order {
+          ...OrderFragment
+        }
+      }
     }
   }
-`
+  ${ORDER_FRAGMENT}
+`;
 
 export const UPDATE_ORDER_STATUS = `
   mutation UpdateOrderStatus($order_id: Int!, $status: String!) {
@@ -100,87 +105,87 @@ export const UPDATE_ORDER_STATUS = `
       status
     }
   }
-`
+`;
 
 export type CreateOrderInputVariables = {
-  order_date: string
-  status: OrderStatus
-  order_items: { data: BaseItem[] }
-}
+  order_date: string;
+  status: OrderStatus;
+  order_items: { data: BaseItem[] };
+};
 
 export type AddOrderItemInputVariables = {
-  name: string
-  link: string
-  category: string
-  quantity: string
-  order_id: number
-}
+  name: string;
+  link: string;
+  category: string;
+  quantity: string;
+  order_id: number;
+};
 
 export type UpdateOrderItemInputVariables = {
-  item_id: number
-  order_id: number
-  quantity: string
-}
+  item_id: number;
+  order_id: number;
+  quantity: string;
+};
 
 export type UpdateOrderStatusInputVariables = {
-  order_id: number
-  status: string
-}
+  order_id: number;
+  status: string;
+};
 
 export const createNextOrderFromBaseItems = (
   items: BaseItem[],
   createOrder: (input: CreateOrderInputVariables) => Promise<any>
 ) => {
   // I order every Thursday
-  const thursdayDay = 4
-  const nextThursday = getNextDayOfWeek(new Date(), thursdayDay)
+  const thursdayDay = 4;
+  const nextThursday = getNextDayOfWeek(new Date(), thursdayDay);
   const baseItems = items.map(({ item_id, quantity }) => ({
     item_id,
     quantity,
-  }))
+  }));
 
   return createOrder({
     order_date: toApiDateString(nextThursday),
     status: OrderStatus.Ongoing,
     order_items: { data: baseItems },
-  })
-}
+  });
+};
 
 export type Item = {
-  id: number
-  name: string
-  link?: string | null
-  category?: string | null
-}
+  id: number;
+  name: string;
+  link?: string | null;
+  category?: string | null;
+};
 
 export type OrderItem = {
-  item: Item
-  quantity: string
-}
+  item: Item;
+  quantity: string;
+};
 
 export type Order = {
-  id: number
-  order_date: string
-  order_items: OrderItem[]
-}
+  id: number;
+  order_date: string;
+  order_items: OrderItem[];
+};
 
 export type BaseItem = {
-  item_id: number
-  quantity: string
-}
+  item_id: number;
+  quantity: string;
+};
 
 export type MainQuery = {
-  base_order: BaseItem[]
-  items: Item[]
-  orders: Order[]
-}
+  base_order: BaseItem[];
+  items: Item[];
+  orders: Order[];
+};
 
 export type AdminOrder = {
-  id: number
-  order_date: string
-  status: string
-}
+  id: number;
+  order_date: string;
+  status: string;
+};
 
 export type AdminOrdersQuery = {
-  orders: AdminOrder[]
-}
+  orders: AdminOrder[];
+};
