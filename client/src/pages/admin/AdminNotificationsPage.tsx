@@ -18,7 +18,7 @@ import {
   UPDATE_ORDER_STATUS,
   UpdateOrderStatusInputVariables,
 } from "api/adminApi";
-import { AdminOrderRow } from "components/AdminOrderRow";
+import { AdminOrderRow } from "components/admin/AdminOrderRow";
 import {
   ConfirmationResultState,
   ConfirmationResultStatus,

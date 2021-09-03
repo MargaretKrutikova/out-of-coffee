@@ -3,12 +3,9 @@ import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { AdminOrder } from "../api/adminApi";
-import {
-  formatWithMonthStr,
-  getOrderDeliveryDate,
-} from "../functions/orderDates";
-import { OrderStatus, toOrderStatus } from "../functions/orderStatus";
+import { AdminOrder } from "api/adminApi";
+import { formatWithMonthStr, getOrderDeliveryDate } from "functions/orderDates";
+import { OrderStatus, toOrderStatus } from "functions/orderStatus";
 import { AdminOrderAction } from "./AdminOrderAction";
 
 type Props = {

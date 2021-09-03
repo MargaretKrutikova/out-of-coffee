@@ -3,8 +3,8 @@ import MailOutline from "@material-ui/icons/MailOutline";
 import Check from "@material-ui/icons/Check";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import { AdminOrder } from "../api/adminApi";
-import { OrderStatus, toOrderStatus } from "../functions/orderStatus";
+import { AdminOrder } from "api/adminApi";
+import { OrderStatus, toOrderStatus } from "functions/orderStatus";
 
 type Props = {
   order: AdminOrder;
