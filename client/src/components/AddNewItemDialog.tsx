@@ -13,6 +13,7 @@ export type NewItem = {
   quantity: string
 }
 
+
 type Props = {
   open: boolean
   onClose: () => void
