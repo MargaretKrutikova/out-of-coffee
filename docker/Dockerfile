@@ -12,7 +12,7 @@ RUN mkdir node_modules
 COPY . .
 
 # 
-EXPOSE 4444
+EXPOSE 8008
 
 #bootstrap lerna
 RUN npm set progress=false && npm install 
@@ -21,4 +21,4 @@ RUN npm set progress=false && npm run build --production
 
 #server start
 WORKDIR /usr/src/app/packages/server
-ENTRYPOINT ["npm", "run", "-p", "4444"]
+ENTRYPOINT ["npm", "run", "start"]

@@ -22,7 +22,7 @@ services:
       # HASURA_GRAPHQL_ADMIN_SECRET: superdupersecret
   app:
     ports:
-      - "4444:4444"
+      - "4444:8008"
     depends_on:
     - graphql-engine
     build: 
