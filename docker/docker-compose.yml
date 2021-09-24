@@ -20,6 +20,16 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
       ## uncomment next line to set an admin secret
       # HASURA_GRAPHQL_ADMIN_SECRET: superdupersecret
+  app:
+    ports:
+      - "4444:4444"
+    depends_on:
+    - graphql-engine
+    build: 
+      context: ..
+      dockerfile: docker/Dockerfile
+      # network: host
+    restart: always 
 volumes:
   db_data:
   
