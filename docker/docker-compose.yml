@@ -21,6 +21,7 @@ services:
       ## uncomment next line to set an admin secret
       # HASURA_GRAPHQL_ADMIN_SECRET: superdupersecret
   app:
+    image: out-of-start:latest
     ports:
       - "4444:8008"
       - "4445:3000"
