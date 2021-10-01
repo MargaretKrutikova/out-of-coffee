@@ -25,5 +25,5 @@ RUN pnpm set progress=false && pnpm run bootstrap
 RUN pnpm set progress=false && pnpm run build
 
 #ALL start
-WORKDIR /usr/src/app/packages/server
+WORKDIR /usr/src/app
 ENTRYPOINT ["pnpm", "run", "start"]
