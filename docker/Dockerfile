@@ -5,20 +5,25 @@ FROM node:14-alpine
 ENV NPM_CONFIG_LOGLEVEL warn
 
 # Create app directory
+
+RUN mkdir -p /usr/src/app/node_modules
 WORKDIR /usr/src/app
-RUN mkdir node_modules
 
 # Copy project files into the docker image
 COPY . .
 
 # 
 EXPOSE 8008
+EXPOSE 3000
+
+RUN npm install -g pnpm
 
 #bootstrap lerna
-RUN npm set progress=false && npm install 
-RUN npm set progress=false && npm run bootstrap 
-RUN npm set progress=false && npm run build --production
+RUN pnpm set progress=false && pnpm install 
+RUN pnpm set progress=false && pnpm run bootstrap 
+# RUN pnpm set progress=false && npm run start
+RUN pnpm set progress=false && pnpm run build
 
-#server start
+#ALL start
 WORKDIR /usr/src/app/packages/server
-ENTRYPOINT ["npm", "run", "start"]
+ENTRYPOINT ["pnpm", "run", "start"]

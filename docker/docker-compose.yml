@@ -23,6 +23,7 @@ services:
   app:
     ports:
       - "4444:8008"
+      - "4445:3000"
     depends_on:
     - graphql-engine
     build: 
