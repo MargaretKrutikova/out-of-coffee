@@ -19,11 +19,14 @@ EXPOSE 3000
 RUN npm install -g pnpm
 
 #bootstrap lerna
-RUN pnpm set progress=false && pnpm install 
+RUN mv ./node_modules ./node_modules.tmp \
+  && mv ./node_modules.tmp ./node_modules \
+  && pnpm set progress=false && pnpm install 
+ 
 RUN pnpm set progress=false && pnpm run bootstrap 
 # RUN pnpm set progress=false && npm run start
 RUN pnpm set progress=false && pnpm run build
 
 #ALL start
-WORKDIR /usr/src/app/packages/server
+WORKDIR /usr/src/app
 ENTRYPOINT ["pnpm", "run", "start"]
