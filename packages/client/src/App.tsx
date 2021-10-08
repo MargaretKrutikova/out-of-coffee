@@ -1,9 +1,11 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@reach/tabs';
-import './App.css';
+
 
 function App() {
   
   return (
+    <>
+    <h2>FOODURA</h2>
     <Tabs>
       <TabList>
         <Tab>One</Tab>
@@ -23,6 +25,7 @@ function App() {
         </TabPanel>
       </TabPanels>
     </Tabs>
+    </>
   );
 }
 
