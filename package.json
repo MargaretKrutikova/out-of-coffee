@@ -2,11 +2,9 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap",
-    "build": "lerna run build",
-    "start": "lerna run start --stream"
+    "start": "pnpm start --prefix packages/client/",
+    "serve": "pnpm start --prefix packages/server/"
   },
   "devDependencies": {
-    "lerna": "^4.0.0"
   }
 }
