@@ -2,6 +2,8 @@
   "name": "root",
   "private": true,
   "scripts": {
+    "start": "pnpm start --prefix packages/client/",
+    "serve": "pnpm start --prefix packages/server/"
   },
   "devDependencies": {
   }
