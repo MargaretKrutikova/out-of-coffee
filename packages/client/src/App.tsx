@@ -2,7 +2,6 @@ import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@reach/tabs';
 import './App.css';
 
 function App() {
-  
   return (
     <Tabs>
       <TabList>
