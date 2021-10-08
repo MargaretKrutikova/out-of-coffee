@@ -4,7 +4,6 @@ import './App.css';
 import { Orders } from './views';
 
 function App() {
-  
   return (
     <Tabs>
       <TabList>
