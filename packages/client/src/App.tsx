@@ -1,10 +1,12 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@reach/tabs';
-import './App.css';
+
 
 import { Orders } from './views';
 
 function App() {
   return (
+    <>
+    <h2>FOODURA</h2>
     <Tabs>
       <TabList>
         {/* Just nu jobbar Victor här */}
@@ -25,6 +27,7 @@ function App() {
         </TabPanel>
       </TabPanels>
     </Tabs>
+    </>
   );
 }
 
