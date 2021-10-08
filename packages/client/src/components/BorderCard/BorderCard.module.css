@@ -1,0 +1,58 @@
+:root {
+  --top-padding: 44px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  padding: 0;
+  margin: 0;
+}
+
+.topWhiteBackground {
+  background: white;
+  height: 1px;
+  width: 80%;
+  bottom: 50%;
+}
+
+.borderCard {
+  padding: 32px;
+  position: relative;
+  border: 1px solid black;
+  border-top: black 1px solid;
+  margin-top: var(--top-padding);
+}
+
+.cardTitlesContainer {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  top: -50%;
+  width: 100%;
+}
+
+.cardTitles {
+  background-color: white;
+}
+
+.leftSideWhite {
+  position: absolute;
+  left: -1px;
+  width: 1px;
+  height: 50%;
+  background-color: white;
+  top: calc(75% - var(--top-padding));
+}
+
+.rightSideWhite {
+  position: absolute;
+  right: -1px;
+  width: 1px;
+  height: 50%;
+  background-color: white;
+  top: calc(75% - var(--top-padding));
+}
